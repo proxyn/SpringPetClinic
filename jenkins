@@ -1,0 +1,29 @@
+pipeline{
+    agent{label 'master' }
+    tools{maven 'm3' }
+    stages{
+        stage('checkout'){
+            steps{
+                git branch: 'main' , url: 'https://github.com/proxyn/SpringPetClinic.git'
+            }
+        }
+        stage('build'){
+            steps{
+                sh 'mvn compile'
+            }
+        }
+        stage('test'){
+            sh 'mvn test'
+        }
+    }
+    stage('package'){
+        sh 'mvn package'
+    }
+}
+stage('deploy'){
+    steps{
+        sh 'java - jar /var/lib/jenkins/workspace/petclinicdeclarativepipeline/target/*.jar'
+    }
+}
+}
+}
